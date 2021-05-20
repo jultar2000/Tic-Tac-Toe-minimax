@@ -6,150 +6,178 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PlayerVsPlayer implements ActionListener {
+public class PlayerVsPlayer extends board {
 
-        private int _board_size;
-        private boolean X_turn;
-
-        private JFrame frame = new JFrame();
-        private JPanel text_panel = new JPanel();
-        private JPanel button_panel = new JPanel();
-
-        private JPanel additional_panel = new JPanel();
-        private JButton reset = new JButton();
-        private ArrayList<JButton> game_type_buttons = new ArrayList<JButton>();
-
-        private JLabel text_label = new JLabel();
-        private ArrayList<ArrayList<JButton>> buttons = new ArrayList<>();
+        private boolean isWin=false;
 
         PlayerVsPlayer(int size) {
-                _board_size = size;
-
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(900,900);
-                frame.setLayout(new BorderLayout());
-                frame.setVisible(true);
-
-                text_label.setForeground(new Color(179, 14, 14));
-                text_label.setBackground(new Color(10, 10, 10));
-                text_label.setFont(new Font("Ink Free",Font.BOLD,90));
-                text_label.setHorizontalAlignment(JLabel.CENTER);
-                text_label.setText("Tic-Tac-Toe");
-                text_label.setOpaque(true);
-
-                reset.setFont(new Font("Ink Free",Font.BOLD,30));
-                reset.setFocusable(true);
-                reset.setText("Restart the game!");
-                reset.addActionListener(this);
-
-                additional_panel.setLayout(new GridLayout(4,1));
-                additional_panel.add(reset);
-
-                for(int i =0;i<3;i++)
-                {
-                    game_type_buttons.add(new JButton());
-                    additional_panel.add(game_type_buttons.get(i));
-                    game_type_buttons.get(i).setFont(new Font("Ink Free",Font.BOLD,30));
-                    game_type_buttons.get(i).setFocusable(true);
-                    game_type_buttons.get(i).addActionListener(this);
-                }
-
-                game_type_buttons.get(0).setText("Player Vs Player");
-                game_type_buttons.get(1).setText("Player Vs Ai");
-                game_type_buttons.get(2).setText("Ai Vs Ai");
-
-                text_panel.setLayout(new BorderLayout());
-                button_panel.setLayout(new GridLayout(_board_size,_board_size));
-
-                for(int i=0;i < _board_size;i++)
-                    buttons.add(new ArrayList());
-
-                for(int i=0; i< _board_size; i++) {
-                    for(int j=0;j<_board_size;j++) {
-                        buttons.get(i).add(new JButton());
-                        button_panel.add(buttons.get(i).get(j));
-                        buttons.get(i).get(j).setFont(new Font("Ink Free", Font.BOLD, 120));
-                        buttons.get(i).get(j).setFocusable(true);
-                        buttons.get(i).get(j).addActionListener(this);
-                    }
-                }
-
-                text_panel.add(text_label);
-                frame.add(text_panel,BorderLayout.NORTH);
-                frame.add(additional_panel, BorderLayout.EAST);
-                frame.add(button_panel);
-
-                FirstTurn();
-
+            super(size);
+            FirstTurn();
         }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        for (int i = 0; i < _board_size; i++) {
-            for(int j=0;j<_board_size;j++) {
-                if (e.getSource() == buttons.get(i).get(j)) {
-                    if (buttons.get(i).get(j).getText() == "") {
-                        if (X_turn == true) {
-                            text_label.setText("O turn");
-                            buttons.get(i).get(j).setForeground(new Color(17, 36, 172));
-                            buttons.get(i).get(j).setText("X");
-                            X_turn = false;
+        for (int i = 0; i < get_board_size(); i++) {
+            for(int j=0;j<get_board_size();j++) {
+                if (e.getSource() == getButtons().get(i).get(j)) {
+                    if (getButtons().get(i).get(j).getText() == "") {
+                        if (isX_turn() == true) {
+                            getText_label().setText("O turn");
+                            getButtons().get(i).get(j).setForeground(new Color(196, 24, 64));
+                            getButtons().get(i).get(j).setText("X");
+                            setX_turn(false);
                             ifWin();
                         } else {
-                            text_label.setText("X turn");
-                            buttons.get(i).get(j).setForeground(new Color(17, 36, 172));
-                            buttons.get(i).get(j).setText("O");
-                            X_turn = true;
+                            getText_label().setText("X turn");
+                            getButtons().get(i).get(j).setForeground(new Color(17, 36, 172));
+                            getButtons().get(i).get(j).setText("O");
+                            setX_turn(true);
                             ifWin();
                         }
                     }
                 }
             }
         }
-            if(e.getSource() == reset){
+            if(e.getSource() == getReset()){
                 Restart();
             }
     }
 
-    public void ifWin()
-        {
-            int[][] tmp_array = new int[_board_size][_board_size];
+    public void ifWin() {
 
-            for(int i=0;i<_board_size;i++){
-                for(int j=0; j< _board_size; j++){
-                    if(buttons.get(i).get(j).getText() == "O") {
-                        tmp_array[i][j] = 0;
+
+        int o_count = 0;
+        int x_count = 0;
+
+        for (int i = 0; i < get_board_size(); i++) {
+
+
+            //Check for a win in horizontal direction
+            for (int j = 0; j < get_board_size(); j++) {
+                if (getButtons().get(i).get(j).getText() == "O") {
+                    o_count++;
+                    if (o_count == get_board_size()) {
+                        getText_label().setText("O Wins!");
+                        isWin = true;
                     }
-
-                    else if(buttons.get(i).get(j).getText() == "X"){
-                        tmp_array[i][j] = 1;
+                } else if (getButtons().get(i).get(j).getText() == "X") {
+                    x_count++;
+                    if (x_count == get_board_size()) {
+                        getText_label().setText("X Wins!");
+                        isWin = true;
                     }
                 }
             }
-         }
+
+            x_count = 0;
+            o_count = 0;
 
 
+            //Check for a win in vertical direction
+            for (int j = 0; j < get_board_size(); j++) {
+                if (getButtons().get(j).get(i).getText() == "O") {
+                    o_count++;
+                    if (o_count == get_board_size()) {
+                        getText_label().setText("O Wins!");
+                        isWin = true;
+                    }
+                } else if (getButtons().get(j).get(i).getText() == "X") {
+                    x_count++;
+                    if (x_count == get_board_size()) {
+                        getText_label().setText("X Wins!");
+                        isWin = true;
+                    }
+                }
+            }
+
+            x_count = 0;
+            o_count = 0;
+
+
+            //Check for a win in a diagonal direction
+            for (int j = 0; j < get_board_size(); j++) {
+                if (getButtons().get(j).get(j).getText() == "O") {
+                    o_count++;
+                    if (o_count == get_board_size()) {
+                        getText_label().setText("O Wins!");
+                        isWin = true;
+                    }
+                } else if (getButtons().get(j).get(j).getText() == "X") {
+                    x_count++;
+                    if (x_count == get_board_size()) {
+                        getText_label().setText("X Wins!");
+                        isWin = true;
+                    }
+                }
+            }
+
+            x_count = 0;
+            o_count = 0;
+
+            //Check for a win in a anti-diagonal direction
+            int c=0;
+            int d=get_board_size()-1;
+            while(c < get_board_size()){
+                while(d >= 0){
+                    if (getButtons().get(c).get(d).getText() == "O") {
+                        o_count++;
+                        if (o_count == get_board_size()) {
+                            getText_label().setText("O Wins!");
+                            isWin = true;
+                        }
+                    } else if (getButtons().get(c).get(d).getText() == "X") {
+                        x_count++;
+                        if (x_count == get_board_size()) {
+                            getText_label().setText("X Wins!");
+                            isWin = true;
+                        }
+                    }
+
+                    c++;
+                    d--;
+                }
+            }
+
+
+            x_count = 0;
+            o_count = 0;
+
+            if (isWin == true) {
+                for (int b = 0; b < get_board_size(); b++) {
+                    for (int j = 0; j < get_board_size(); j++) {
+                        getButtons().get(b).get(j).setEnabled(false);
+                    }
+                }
+
+            }
+
+        }
+
+    }
 
     public void FirstTurn()
     {
         Random rand = new Random();
         int randomValue = rand.nextInt() % 2;
         if(randomValue == 0) {
-            X_turn = false;
+            setX_turn(false);
         }
         else {
-            X_turn = true;
+            setX_turn(true);
         }
     }
 
+
     public void Restart(){
-            for(int i=0; i < _board_size; i++) {
-                for (int j = 0; j < _board_size; j++) {
-                    buttons.get(i).get(j).setText("");
-                    buttons.get(i).get(j).setBackground(null);
+            for(int i=0; i < get_board_size(); i++) {
+                for (int j = 0; j < get_board_size(); j++) {
+                    getButtons().get(i).get(j).setText("");
+                    getButtons().get(i).get(j).setEnabled(true);
+                    getButtons().get(i).get(j).setBackground(null);
+                    isWin = false;
                 }
             }
-        text_label.setText("Tic-Tac-Toe");
+        getText_label().setText("Tic-Tac-Toe");
     }
 
     public void Xwins(){

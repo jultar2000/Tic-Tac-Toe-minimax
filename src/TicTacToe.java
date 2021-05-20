@@ -8,7 +8,7 @@ public class TicTacToe {
         {
             case "PlayerVsPlayer":
 
-                new PlayerVsPlayer(4);
+                new PlayerVsPlayer(5);
                 break;
 
             case "PlayerVsAi":
@@ -16,7 +16,6 @@ public class TicTacToe {
                 break;
             case "AiVsAi":
                 break;
-
         }
 
     }
