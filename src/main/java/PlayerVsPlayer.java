@@ -1,3 +1,9 @@
+
+/*
+This class states for implementing normal tic-tac-toe game where one user
+can play agaist another
+ */
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -8,8 +14,8 @@ import java.util.Random;
 
 public class PlayerVsPlayer extends board {
 
-        PlayerVsPlayer(int size) {
-            super(size);
+        PlayerVsPlayer(int size,int win_num) {
+            super(size,win_num);
             FirstTurn();
         }
 
@@ -50,11 +56,11 @@ public class PlayerVsPlayer extends board {
             }
         if(e.getSource() == getGame_type_buttons().get(0)) {
             this.getFrame().dispose();
-            new PlayerVsPlayer(get_board_size());
+            new PlayerVsPlayer(get_board_size(), get_win_number());
         }
         if(e.getSource() == getGame_type_buttons().get(1)) {
             this.getFrame().dispose();
-            new PlayerVsAi(get_board_size());
+            new PlayerVsAi(get_board_size(), get_win_number());
         }
     }
 }

@@ -1,4 +1,9 @@
 
+/*
+This class states for implementing the board of tic-tac-toe game
+It also contains some functions to define state of the game or reset the game
+ */
+
 import lombok.Getter;
 import lombok.Setter;
 import javax.swing.*;
@@ -15,6 +20,7 @@ public class board implements ActionListener
 
     private int _board_size;
     private boolean X_turn;
+    private int _win_number;
 
     private JFrame frame = new JFrame();
     private JPanel text_panel = new JPanel();
@@ -27,8 +33,9 @@ public class board implements ActionListener
     private JLabel text_label = new JLabel();
     private ArrayList<ArrayList<JButton>> buttons = new ArrayList<>();
 
-    board(int size) {
+    board(int size,int win_num) {
         _board_size = size;
+        _win_number = win_num;
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(900,900);
@@ -37,7 +44,7 @@ public class board implements ActionListener
         frame.setLocationRelativeTo(null);
 
         text_label.setForeground(new Color(179, 14, 14));
-        text_label.setBackground(new Color(10, 10, 10));
+        text_label.setBackground(new Color(5, 5, 5));
         text_label.setFont(new Font("Ink Free",Font.BOLD,90));
         text_label.setHorizontalAlignment(JLabel.CENTER);
         text_label.setText("Tic-Tac-Toe");
@@ -77,7 +84,7 @@ public class board implements ActionListener
             for(int j=0;j<_board_size;j++) {
                 buttons.get(i).add(new JButton());
                 button_panel.add(buttons.get(i).get(j));
-                buttons.get(i).get(j).setFont(new Font("Ink Free", Font.BOLD, 120));
+                buttons.get(i).get(j).setFont(new Font("Ink Free", Font.BOLD, 100));
                 buttons.get(i).get(j).setFocusable(true);
                 buttons.get(i).get(j).addActionListener(this);
             }
@@ -94,18 +101,18 @@ public class board implements ActionListener
 
         if(e.getSource() == game_type_buttons.get(0)) {
             this.frame.dispose();
-            new PlayerVsPlayer(_board_size);
+            new PlayerVsPlayer(_board_size,_win_number);
         }
 
         else if(e.getSource() == game_type_buttons.get(1)) {
             this.frame.dispose();
-            new PlayerVsAi(_board_size);
+            new PlayerVsAi(_board_size,_win_number);
         }
     }
 
+
+    //Function defining if there is a win on the board
     public String ifWin() {
-
-
 
         int x_count = 0;
         int o_count = 0;
@@ -116,16 +123,16 @@ public class board implements ActionListener
             for (int j = 0; j < _board_size; j++) {
                 if (buttons.get(i).get(j).getText().equals("X")) {
                     x_count++;
-                    if (x_count == _board_size) {
-                        return "X";
-                    }
+                    if (x_count == _win_number) return "X";
                 }
-                else if (buttons.get(i).get(j).getText().equals("O")) {
+                else x_count=0;
+
+
+                if (buttons.get(i).get(j).getText().equals("O")) {
                     o_count++;
-                    if (o_count == _board_size) {
-                        return "O";
-                    }
+                    if (o_count == _win_number) return "O";
                 }
+                else o_count=0;
             }
 
             x_count = 0;
@@ -135,16 +142,15 @@ public class board implements ActionListener
             for (int j = 0; j < _board_size; j++) {
                 if (buttons.get(j).get(i).getText().equals("X")) {
                     x_count++;
-                    if (x_count == _board_size) {
-                        return "X";
-                    }
+                    if (x_count == _win_number) return "X";
                 }
-                else if (buttons.get(j).get(i).getText().equals("O")) {
+                else x_count=0;
+
+                if (buttons.get(j).get(i).getText().equals("O")) {
                     o_count++;
-                    if (o_count == _board_size) {
-                        return "O";
-                    }
+                    if (o_count == _win_number) return "O";
                 }
+                else o_count=0;
             }
 
             x_count = 0;
@@ -154,16 +160,15 @@ public class board implements ActionListener
             for (int j = 0; j < _board_size; j++) {
                 if (buttons.get(j).get(j).getText().equals("X")) {
                     x_count++;
-                    if (x_count == _board_size) {
-                        return "X";
-                    }
+                    if (x_count == _win_number) return "X";
                 }
-                else if (buttons.get(j).get(j).getText().equals("O")) {
+                else x_count=0;
+
+                if (buttons.get(j).get(j).getText().equals("O")) {
                     o_count++;
-                    if (o_count == _board_size) {
-                        return "O";
-                    }
+                    if (o_count == _win_number) return "O";
                 }
+                else o_count=0;
             }
 
             x_count = 0;
@@ -176,16 +181,15 @@ public class board implements ActionListener
                 while (d >= 0) {
                     if (buttons.get(c).get(d).getText().equals("X")) {
                         x_count++;
-                        if (x_count == _board_size) {
-                            return "X";
-                        }
+                        if (x_count == _win_number) return "X";
                     }
-                    else if (buttons.get(c).get(d).getText().equals("O")) {
+                    else x_count=0;
+
+                    if (buttons.get(c).get(d).getText().equals("O")) {
                         o_count++;
-                        if (o_count == _board_size) {
-                            return "O";
-                        }
+                        if (o_count == _win_number) return "O";
                     }
+                    else o_count=0;
 
                     c++;
                     d--;
@@ -197,6 +201,8 @@ public class board implements ActionListener
 
         int count_three = 0;
 
+
+        //Function defining if its a draw
         for (int i = 0; i < _board_size; i++) {
             for (int j = 0; j < _board_size; j++) {
                 if (buttons.get(i).get(j).getText().equals("X") || buttons.get(i).get(j).getText().equals("O"))
@@ -212,6 +218,8 @@ public class board implements ActionListener
 
     }
 
+
+    //Function disabling all buttons
     public void setDisable(boolean win,String sign){
 
             for (int b = 0; b < _board_size; b++) {
@@ -226,13 +234,15 @@ public class board implements ActionListener
     }
 
 
+
+    //Functions defining who's the first turn of a players
     public void FirstTurn() {
         Random rand = new Random();
         int randomValue = rand.nextInt() % 2;
         X_turn = randomValue != 0;
     }
 
-
+    //Function restarting board and buttons
     public void Restart(){
         for(int i=0; i < _board_size; i++) {
             for (int j = 0; j < _board_size; j++) {

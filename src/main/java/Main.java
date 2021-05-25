@@ -1,8 +1,9 @@
+/*
+        This class contains main function
+ */
 
 public class Main {
-
     public static void main(String[] args) {
-
-            new board(3);
+             new StartingBoard();
     }
 }
