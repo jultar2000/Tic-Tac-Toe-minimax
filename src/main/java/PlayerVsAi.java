@@ -30,7 +30,6 @@ public class PlayerVsAi extends board {
         hashMap.put("draw", 0);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -72,15 +71,10 @@ public class PlayerVsAi extends board {
         }
     }
 
-
-    public int minimax(int depth, boolean is_Maximizing) {
-/*
-        String result = ifWin();
-        if (result != null)
-            return hashMap.get(result);
-*/
+    public int minimax(int depth, boolean is_Maximizing, int alpha, int beta) {
 
         String result = ifWin();
+
         if (result != null) {
             if(result.equals(Ai))
                 return hashMap.get(Ai)+depth;
@@ -90,9 +84,7 @@ public class PlayerVsAi extends board {
                 return hashMap.get("draw");
         }
 
-
-
-        int bestResult;
+        int bestResult ;
 
         if (is_Maximizing) {
             bestResult = -INFINITY;
@@ -100,25 +92,28 @@ public class PlayerVsAi extends board {
                 for (int j = 0; j < get_board_size(); j++) {
                     if (getButtons().get(i).get(j).getText().equals("")) {
                         getButtons().get(i).get(j).setText(Ai);
-                        int score = minimax(depth + 1, false);
+                        int score = minimax(depth + 1, false, alpha,beta);
                         getButtons().get(i).get(j).setText("");
                         bestResult = Math.max(score, bestResult);
-                        if(depth == 0)
-                            return bestResult;
+                        alpha = Math.max(alpha,bestResult);
+                        if(beta >= alpha)
+                            break;
                     }
                 }
             }
-        } else {
+        }
+        else {
             bestResult = INFINITY;
             for (int i = 0; i < get_board_size(); i++) {
                 for (int j = 0; j < get_board_size(); j++) {
                     if (getButtons().get(i).get(j).getText().equals("")) {
                         getButtons().get(i).get(j).setText(Player);
-                        int score = minimax(depth + 1, true);
+                        int score = minimax(depth + 1, true,alpha,beta);
                         getButtons().get(i).get(j).setText("");
                         bestResult = Math.min(score, bestResult);
-                        if(depth == 0)
-                            return bestResult;
+                        beta = Math.min(beta,bestResult);
+                        if(beta <= alpha)
+                            break;
                     }
                 }
             }
@@ -135,7 +130,7 @@ public class PlayerVsAi extends board {
             for (int j = 0; j < get_board_size(); j++) {
                 if (getButtons().get(i).get(j).getText().equals("")) {
                     getButtons().get(i).get(j).setText(Ai);
-                    int score = minimax(0, false);
+                    int score = minimax(0, false,-INFINITY,INFINITY);
                     getButtons().get(i).get(j).setText("");
                     if (score > bestResult) {
                         bestResult = score;
