@@ -24,7 +24,7 @@ public class PlayerVsPlayer extends board {
         for (int i = 0; i < get_board_size(); i++) {
             for(int j=0;j<get_board_size();j++) {
                 if (e.getSource() == getButtons().get(i).get(j)) {
-                    if (getButtons().get(i).get(j).getText() == "") {
+                    if (getButtons().get(i).get(j).getText().equals("")) {
                         if (isX_turn() == true) {
                             getText_label().setText("O turn");
                             getButtons().get(i).get(j).setForeground(new Color(196, 24, 64));
