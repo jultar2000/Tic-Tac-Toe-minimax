@@ -77,9 +77,9 @@ public class PlayerVsAi extends board {
 
         if (result != null) {
             if(result.equals(Ai))
-                return hashMap.get(Ai)+depth;
+                return hashMap.get(Ai)-depth;
             else if(result.equals(Player))
-                return hashMap.get(Player)-depth;
+                return hashMap.get(Player)+depth;
             else
                 return hashMap.get("draw");
         }
@@ -96,7 +96,7 @@ public class PlayerVsAi extends board {
                         getButtons().get(i).get(j).setText("");
                         bestResult = Math.max(score, bestResult);
                         alpha = Math.max(alpha,bestResult);
-                        if(beta >= alpha)
+                        if(beta <= alpha)
                             break;
                     }
                 }

@@ -156,7 +156,7 @@ public class board implements ActionListener
             x_count = 0;
             o_count = 0;
 
-            //Check for a win in a diagonal direction
+            //Check for a win on diagonal
             for (int j = 0; j < _board_size; j++) {
                 if (buttons.get(j).get(j).getText().equals("X")) {
                     x_count++;
@@ -174,7 +174,7 @@ public class board implements ActionListener
             x_count = 0;
             o_count = 0;
 
-            //Check for a win in a anti-diagonal direction
+            //Check for a win on anti-diagonal
             int c = 0;
             int d = _board_size - 1;
             while (c < _board_size) {
@@ -202,7 +202,7 @@ public class board implements ActionListener
         int count_three = 0;
 
 
-        //Function defining if its a draw
+        //Defining if its a draw
         for (int i = 0; i < _board_size; i++) {
             for (int j = 0; j < _board_size; j++) {
                 if (buttons.get(i).get(j).getText().equals("X") || buttons.get(i).get(j).getText().equals("O"))
