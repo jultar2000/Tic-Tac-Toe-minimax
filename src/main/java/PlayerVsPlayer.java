@@ -34,7 +34,7 @@ public class PlayerVsPlayer extends board {
                             if(result == "X")
                                 setDisable(true,"X");
                             else if(result == "draw")
-                                setDisable(false,"Draw");
+                                setDisable(false,"draw");
                         } else {
                             getText_label().setText("X turn");
                             getButtons().get(i).get(j).setForeground(new Color(17, 36, 172));
@@ -44,7 +44,7 @@ public class PlayerVsPlayer extends board {
                             if(result == "O")
                                 setDisable(true,"O");
                             else if(result == "draw")
-                                setDisable(false,"Draw");
+                                setDisable(false,"draw");
                         }
                     }
                 }

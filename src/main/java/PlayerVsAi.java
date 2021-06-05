@@ -6,6 +6,9 @@ and setting a human player against it
 
 
 
+
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
@@ -17,7 +20,7 @@ public class PlayerVsAi extends board {
 
     private final String Ai = "X";
 
-    private static final int INFINITY = 999999;
+    private static final int INFINITY = 9999999;
 
     HashMap<String, Integer> hashMap = new HashMap<>();
 
@@ -25,34 +28,34 @@ public class PlayerVsAi extends board {
         super(size, win_num);
         FirstTurn();
 
-        hashMap.put("X", 10);
-        hashMap.put("O", -10);
+        hashMap.put("X", 100000);
+        hashMap.put("O", -100000);
         hashMap.put("draw", 0);
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
-
                 for (int i = 0; i < get_board_size(); i++) {
                     for (int j = 0; j < get_board_size(); j++) {
                         if (e.getSource() == getButtons().get(i).get(j)) {
                             if (getButtons().get(i).get(j).getText().equals("")) {
-                                    getButtons().get(i).get(j).setFont(new Font("Ink Free", Font.BOLD, 100));
-                                    getButtons().get(i).get(j).setText("O");
-                                    getText_label().setText("Ai turn");
-                                    if(Objects.equals(ifWin(), Player)){
-                                        setDisable(true,"Player");
-                                        break;
-                                    }
-                                    else if(Objects.equals(ifWin(), "draw")){
-                                        setDisable(false,"draw");
-                                        break;
-                                    }
-                                    minimax_move();
-                                    getText_label().setText("Player turn");
-                                    if(Objects.equals(ifWin(), Ai)){
-                                        setDisable(true,"Ai");
-                                    }
+                                getButtons().get(i).get(j).setFont(new Font("Ink Free", Font.BOLD, 100));
+                                getButtons().get(i).get(j).setForeground(new Color(17, 36, 172));
+                                getButtons().get(i).get(j).setText("O");
+                                getText_label().setText("Ai turn");
+                                if (Objects.equals(ifWin(), Player)) {
+                                    setDisable(true, "Player");
+                                    break;
+                                } else if (Objects.equals(ifWin(), "draw")) {
+                                    setDisable(false, "draw");
+                                    break;
+                                }
+                                minimax_move();
+                                getText_label().setText("Player turn");
+                                if (Objects.equals(ifWin(), Ai)) {
+                                    setDisable(true, "Ai");
+                                }
                             }
                         }
                     }
@@ -71,6 +74,62 @@ public class PlayerVsAi extends board {
         }
     }
 
+
+    public int Calculate_current_state(String sign){
+        int count;
+        int result=0;
+
+            //Horizontal
+            for(int i=0;i<get_board_size();i++){
+                count = 0;
+                for(int j=0;j<get_board_size();j++){
+                    if(getButtons().get(i).get(j).getText().equals(sign))
+                        count++;
+                }
+                if(count != 0)
+                    result += count*10;
+            }
+
+
+            //Vertical
+            for(int i=0;i<get_board_size();i++){
+                count = 0;
+                for(int j=0;j<get_board_size();j++){
+                    if(getButtons().get(j).get(i).getText().equals(sign))
+                        count++;
+                }
+                if(count != 0)
+                    result += count*10;
+            }
+
+        count = 0;
+
+
+            //Diagonal
+            for(int j=0;j<get_board_size();j++){
+                if(getButtons().get(j).get(j).getText().equals(sign))
+                    count++;
+            }
+                if(count != 0)
+                    result += count*10;
+
+
+            //AntiDiagonal
+            for(int i=0; i< get_board_size(); i++) {
+                count = 0;
+                for (int j = get_board_size() - 1; j >= 0; j--) {
+                    if (getButtons().get(i).get(j).getText().equals(sign))
+                        count++;
+                }
+                if(count != 0)
+                    result += count*10;
+            }
+
+        return result;
+    }
+
+
+
     public int minimax(int depth, boolean is_Maximizing, int alpha, int beta) {
 
         String result = ifWin();
@@ -84,7 +143,14 @@ public class PlayerVsAi extends board {
                 return hashMap.get("draw");
         }
 
-        int bestResult ;
+        if(depth == 5) {
+            if (is_Maximizing)
+                return Calculate_current_state(Ai);
+            else
+                return (-1) * Calculate_current_state(Player);
+        }
+
+        int bestResult;
 
         if (is_Maximizing) {
             bestResult = -INFINITY;
@@ -126,6 +192,7 @@ public class PlayerVsAi extends board {
         int bestResult = -INFINITY;
         int[] move = new int[2];
 
+
         for (int i = 0; i < get_board_size(); i++) {
             for (int j = 0; j < get_board_size(); j++) {
                 if (getButtons().get(i).get(j).getText().equals("")) {
@@ -142,6 +209,7 @@ public class PlayerVsAi extends board {
         }
         getButtons().get(move[0]).get(move[1]).setText(Ai);
         getButtons().get(move[0]).get(move[1]).setFont(new Font("Ink Free", Font.BOLD, 100));
+        getButtons().get(move[0]).get(move[1]).setForeground(new Color(196, 24, 64));
     }
 }
 
